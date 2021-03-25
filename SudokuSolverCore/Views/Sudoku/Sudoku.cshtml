@@ -57,6 +57,21 @@
     .show {
         display: block;
     }
+
+    table tr:nth-of-type(3n) {
+        border-bottom: 3px solid #808080;
+    }
+
+    table tr > td:nth-of-type(3n) {
+        border-right: 3px solid #808080;
+       
+    }
+
+    td {
+        height: 50px;
+        width: 50px;
+        text-align: center;
+    }
 </style>
 <div class="gameContainer">
     <div class="sudokuSidebar">
@@ -73,18 +88,19 @@
                 </div>
             </div>
             <form method="post">
-                @*<button class="btn btn-info m-2" type="button" value="Solve Logical" onclick="location.href='@Url.Action("SudokuSolvedLogical", "Sudoku")'">Solve Logical</button>*@
-                <button asp-controller="Sudoku" asp-action="Sudoku" asp-route-id="5" class="btn btn-info m-2">Solve trough logical method</button>
-                <div class="clearfix"></div>
-                <button class="btn btn-info m-2" type="submit" formaction="Sudoku/SolveGuessing">Solve trough guessing method</button>
-                <div class="clearfix"></div>
-                <button class="btn btn-info m-2" type="submit" formaction="Sudoku/CreateSudoku">Solve </button>
-                <div class="clearfix"></div>
+                <div class="buttonContainer">
+
+                    @*<button class="btn btn-info m-2" type="button" value="Solve Logical" onclick="location.href='@Url.Action("SudokuSolvedLogical", "Sudoku")'">Solve Logical</button>*@
+                    <button asp-controller="Sudoku" asp-action="Sudoku" asp-route-id="5" class="btn btn-info m-2">Solve trough logical method</button>
+                    <div class="clearfix"></div>
+                    <button asp-controller="Sudoku" asp-action="Sudoku" asp-route-id="5" class="btn btn-info m-2">Solve trough guessing method</button>
+                    <div class="clearfix"></div>
+                </div>
             </form>
         </div>
     </div>
     <div class="sudokuMainContainer" id="board">
-        <table class="table table-dark rounded border">
+        <table class="table table-dark rounded border m-2">
             @for (int i = 0; i < 9; i++)
             {
 <tr class="sudokuRow">
