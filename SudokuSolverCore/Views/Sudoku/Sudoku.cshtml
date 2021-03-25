@@ -1,4 +1,4 @@
-﻿@model Shared.Models.SudokuModel
+﻿@model SudokuSolverCore.ViewModels.SudokuWithListItemsViewModel
 
 <style>
     .buttonContainer {
@@ -9,18 +9,76 @@
         border-right: solid 1px #808080;
         border-left: solid 1px #808080;
     }
+    /* Dropdown Button */
+    .dropbtn {
+        background-color: #3498DB;
+        color: white;
+        padding: 16px;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+    }
+
+        /* Dropdown button on hover & focus */
+        .dropbtn:hover, .dropbtn:focus {
+            background-color: #2980B9;
+        }
+
+    /* The container <div> - needed to position the dropdown content */
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    /* Dropdown Content (Hidden by Default) */
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f1f1f1;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+
+        /* Links inside the dropdown */
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+            /* Change color of dropdown links on hover */
+            .dropdown-content a:hover {
+                background-color: #ddd
+            }
+
+    /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+    .show {
+        display: block;
+    }
 </style>
 <div class="gameContainer">
     <div class="sudokuSidebar">
         <div class="clearfix"></div>
         <div class="buttonContainer">
+            <div class="dropdown">
+                <button onclick="myFunction()" class="dropbtn">Choose start template</button>
+                <div id="myDropdown" class="dropdown-content">
+                    <a asp-controller="Sudoku" asp-action="Sudoku" asp-route-id="1">Logical template</a>
+                    <a asp-controller="Sudoku" asp-action="Sudoku" asp-route-id="2">Guessing template</a>
+                    <a asp-controller="Sudoku" asp-action="Sudoku" asp-route-id="3">Empty template</a>
+                    <a asp-controller="Sudoku" asp-action="Sudoku" asp-route-id="4">Hardest in the world template</a>
+
+                </div>
+            </div>
             <form method="post">
                 @*<button class="btn btn-info m-2" type="button" value="Solve Logical" onclick="location.href='@Url.Action("SudokuSolvedLogical", "Sudoku")'">Solve Logical</button>*@
-                <button asp-controller="Sudoku" asp-action="Sudoku" asp-route-id="1" class="btn btn-info m-2" >Get Logical Sudoku</button>
+                <button asp-controller="Sudoku" asp-action="Sudoku" asp-route-id="5" class="btn btn-info m-2">Solve trough logical method</button>
                 <div class="clearfix"></div>
-                <button class="btn btn-info m-2" type="submit" formaction="Sudoku/SolveGuessing">Solve Guessing</button>
+                <button class="btn btn-info m-2" type="submit" formaction="Sudoku/SolveGuessing">Solve trough guessing method</button>
                 <div class="clearfix"></div>
-                <button class="btn btn-info m-2" type="submit" formaction="Sudoku/CreateSudoku">Create Random</button>
+                <button class="btn btn-info m-2" type="submit" formaction="Sudoku/CreateSudoku">Solve </button>
                 <div class="clearfix"></div>
             </form>
         </div>
@@ -33,10 +91,31 @@
     @for (int j = 0; j < 9; j++)
     {
 <td>
-    @Model.Sudoku[i][j].value
+    @Model.Model.Sudoku[i][j].value
 </td>}
 </tr>            }
         </table>
         <p></p>
     </div>
 </div>
+<script>
+    /* When the user clicks on the button,
+toggle between hiding and showing the dropdown content */
+    function myFunction() {
+        document.getElementById("myDropdown").classList.toggle("show");
+    }
+
+    // Close the dropdown menu if the user clicks outside of it
+    window.onclick = function (event) {
+        if (!event.target.matches('.dropbtn')) {
+            var dropdowns = document.getElementsByClassName("dropdown-content");
+            var i;
+            for (i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                }
+            }
+        }
+    }
+</script>

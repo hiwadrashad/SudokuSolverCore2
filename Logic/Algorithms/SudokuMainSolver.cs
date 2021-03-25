@@ -9,6 +9,22 @@ namespace Logic.Algorithms
 {
     public class SudokuMainSolver
     {
+        public static SudokuModel SolveSudoku(int id,SudokuModel model)
+        {
+           
+                switch (id)
+                {
+                    case 5:
+                        SolveSudokuLogical2(model);
+                        break;
+                    default:
+                        break;
+                }
+
+                return model;
+            
+        }
+
         public static bool SolveSudokuLogical2(SudokuModel model)
         {
             for (int i = 0; i < model.Sudoku.Count; i++)

@@ -14,6 +14,6 @@ namespace Repositories.MockingRepository
         SudokuModel SolveSudokuLogical(SudokuModel model);
         Task<SudokuModel> SolveSudokuLogical2(SudokuModel model);
         void EmptyBoard();
-        void InitializeTestboard();
+        void InitializeLogicalBoard();
     }
 }

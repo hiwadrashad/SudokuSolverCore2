@@ -1,6 +1,7 @@
 ﻿using Logic.Algorithms;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SudokuSolverCore.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,18 +15,26 @@ namespace SudokuSolverCore.Controllers
         public readonly Repositories.MockingRepository.IMockingRepo _repo = Repositories.MockingRepository.MockingRepo.GetMockingRepo();
         public IActionResult Sudoku()
         {
-            _repo.InitializeTestboard();
-            var board =_repo.GetSudoku(2);
-            return View(board);
+            var board =_repo.GetSudoku(1);
+            Shared.StaticResources.StaticValues.CurrentSudokuTemplate = board;
+            SudokuWithListItemsViewModel SudokuVM = new SudokuWithListItemsViewModel() { Model = board };
+            return View(SudokuVM);
         }
         [Route("/Sudoku/Sudoku/{id}")]
         public IActionResult Sudoku(int id)
         {
-            //_repo.InitializeTestboard();
-            //_repo.SolveSudokuLogical2(_repo.GetSudoku());
-            var board = _repo.GetSudoku(id);
-            SudokuMainSolver.SolveSudokuLogical2(board);
-            return View(board);
+            if (id < 5)
+            {
+                var board = _repo.GetSudoku(id);
+                SudokuWithListItemsViewModel SudokuVM = new SudokuWithListItemsViewModel() { Model = board };
+                return View(SudokuVM);
+            }
+            else
+            {
+                var board = SudokuMainSolver.SolveSudoku(id, Shared.StaticResources.StaticValues.CurrentSudokuTemplate);
+                SudokuWithListItemsViewModel SudokuVM = new SudokuWithListItemsViewModel() { Model = board };
+                return View(SudokuVM);
+            }
         }
     }
 }
