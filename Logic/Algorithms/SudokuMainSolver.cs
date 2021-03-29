@@ -17,6 +17,9 @@ namespace Logic.Algorithms
                     case 5:
                         SolveSudokuLogical2(model);
                         break;
+                    case 6:
+                        SolveSudokuGuessing(model);
+                        break;
                     default:
                         break;
                 }
@@ -40,6 +43,81 @@ namespace Logic.Algorithms
                                 model.Sudoku[i][j].value = c;
                                 
                                 if (SolveSudokuLogical2(model))
+                                    return true;
+                                else
+                                    model.Sudoku[i][j].value = 0;
+                            }
+                        }
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        public static bool SolveSudokuGuessing(SudokuModel model)
+        {
+            List<CellModel> PreviousChosenRandomNumbers = new List<CellModel>();
+
+            goto GuessNumber;
+
+            GuessNumber:
+
+            Random rnd = new Random();
+            SudokuSolvingSubroutines.CalculateListOfOptions(model);
+            for (int i = 0; i < model.Sudoku.Count; i++)
+            {
+                for (int j = 0; j < model.Sudoku[0].Count; j++)
+                {
+                    if (model.Sudoku[i][j].value == 0)
+                    {
+                        if (model.Sudoku[i][j].amountofoptions == 1)
+                        {
+                            var randomnumber = rnd.Next(1, 10);
+                            do
+                            {
+                                if (SudokuSolvingSubroutines.CheckConstraints(model, i, j, randomnumber))
+                                {
+                                    if (!PreviousChosenRandomNumbers.Contains(model.Sudoku[i][j]))
+                                    {
+
+                                        model.Sudoku[i][j].value = randomnumber;
+                                        PreviousChosenRandomNumbers.Add(model.Sudoku[i][j]);
+                                        goto SolveSudoku;
+                                    }
+                                }
+                            }
+                            while (SudokuSolvingSubroutines.CheckConstraints(model, i, j, randomnumber) == false);
+                            for (int c = 1; c <= 9; c++)
+                            {
+                                if (SudokuSolvingSubroutines.CheckConstraints(model, i, j, c))
+                                {
+                                    model.Sudoku[i][j].value = c;
+                                    goto SolveSudoku;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            SolveSudoku:
+
+
+            for (int i = 0; i < model.Sudoku.Count; i++)
+            {
+                for (int j = 0; j < model.Sudoku[0].Count; j++)
+                {
+                    if (model.Sudoku[i][j].value == 0)
+                    {
+                        for (int c = 1; c <= 9; c++)
+                        {
+                            if (SudokuSolvingSubroutines.CheckConstraints(model, i, j, c))
+                            {
+
+                                model.Sudoku[i][j].value = c;
+
+                                if (SolveSudokuGuessing(model))
                                     return true;
                                 else
                                     model.Sudoku[i][j].value = 0;

@@ -23,6 +23,44 @@ namespace Logic.Algorithms
             return true;
         }
 
+        public static int CheckOptions(SudokuModel model, int row, int col, int c)
+        {
+            int amounofoptions = 0;
+            for (int i = 0; i < 9; i++)
+            {
+                if (model.Sudoku[i][col].value != 0 && model.Sudoku[i][col].value == c)
+                    continue;
+                if (model.Sudoku[row][i].value != 0 && model.Sudoku[row][i].value == c)
+                    continue;
+                if (model.Sudoku[3 * (row / 3) + i / 3][3 * (col / 3) + i % 3].value != 0 && model.Sudoku[3 * (row / 3) + i / 3][3 * (col / 3) + i % 3].value == c)
+                    continue;
+                else
+                {
+                    amounofoptions++;
+                }
+            }
+            return amounofoptions;
+        }
+
+        public static bool CalculateListOfOptions(SudokuModel model)
+        {
+            List<CellModel> listofoptions = new List<CellModel>();
+            for (int i = 0; i < model.Sudoku.Count; i++)
+            {
+                for (int j = 0; j < model.Sudoku[0].Count; j++)
+                {
+                    if (model.Sudoku[i][j].value == 0)
+                    {
+                        for (int c = 1; c <= 9; c++)
+                        {
+                            model.Sudoku[i][j].amountofoptions = CheckOptions(model, i, j, c);
+                        }
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
         public static List<CellModel> GenerateSudokuCellsHierarchical(SudokuModel model)
         {
             SudokuModel returnmodel = new SudokuModel();
